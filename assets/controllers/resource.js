@@ -1,8 +1,6 @@
 import API from '../services/Api.js'
 import { auth } from "./auth";
 
-const headers = {'Authorization': "Bearer " + auth.getToken()}
-
 export const resource = {
     index,
     store,
@@ -10,6 +8,9 @@ export const resource = {
 }
 
 function index() {
+    const authToken = auth.getToken() || auth.getUserFromCookie()
+    const headers = {'Authorization': "Bearer " + authToken}
+
     return new Promise((resolve, reject)=>{
         API.call(
             'GET',
@@ -25,6 +26,9 @@ function index() {
 }
 
 function store(id) {
+    const authToken = auth.getToken() || auth.getUserFromCookie()
+    const headers = {'Authorization': "Bearer " + authToken}
+
     return new Promise((resolve, reject)=>{
         API.call(
             'GET',
@@ -39,7 +43,10 @@ function store(id) {
     })
 }
 
-function update(id, object) {debugger
+function update(id, object) {
+    const authToken = auth.getToken() || auth.getUserFromCookie()
+    const headers = {'Authorization': "Bearer " + authToken}
+
     return new Promise((resolve, reject)=>{
         API.call(
             'PUT',

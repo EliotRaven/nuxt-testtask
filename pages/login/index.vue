@@ -20,6 +20,13 @@
                               placeholder="Enter password">
                 </b-form-input>
             </b-form-group>
+            <b-alert
+                    @dismissed="dismissCountDown=0"
+                    @dismiss-count-down="countDownChanged"
+                    :show="dismissCountDown"
+                    variant="danger">
+                We don't have a user with this email and password combination
+            </b-alert>
             <b-button type="submit">Login</b-button>
         </b-form>
     </div>
@@ -36,7 +43,9 @@
                     email: '',
                     password: '',
                 },
-                show: true
+                show: true,
+                dismissSecs: 3,
+                dismissCountDown: 0
             }
         },
         methods: {
@@ -46,8 +55,12 @@
                 auth.login(this.form).then(res => {
                     this.$router.push('/home')
                 }, err => {
+                    this.dismissCountDown = this.dismissSecs
                     console.log(err)
                 })
+            },
+            countDownChanged (dismissCountDown) {
+                this.dismissCountDown = dismissCountDown
             },
         }
     }

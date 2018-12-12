@@ -9,7 +9,7 @@
         </div>
         <b-container>
             <b-row>
-                <b-form class="edit" v-if="project.name" @submit="onSubmit">
+                <b-form class="edit" v-if="project.id" @submit="onSubmit">
                     <b-container class="bv-example-row">
                         <b-row>
                             <b-col cols="8">
@@ -126,8 +126,7 @@
                 this.dismissCountDown = dismissCountDown
             },
             toggle(val){
-                // uncomment for update active status
-                // this.project.is_active = val
+                this.project.is_active = val
             }
         },
         created() {

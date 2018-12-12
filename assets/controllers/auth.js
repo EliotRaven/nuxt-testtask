@@ -1,11 +1,14 @@
 import API from '../services/Api.js'
 import Cookies from 'js-cookie'
+import cookie from 'cookie'
 
 export const auth = {
     login,
     logout,
     getToken,
-    getUserFromCookie
+    getUserFromCookie,
+    getUidFromStorage,
+    getUidFromCookie
 }
 
 function login(data) {
@@ -21,6 +24,7 @@ function login(data) {
                 sessionStorage.setItem('user', JSON.stringify(res.data.app_init.user))
                 sessionStorage.setItem('token', res.data.token)
                 Cookies.set('token', res.data.token)
+                Cookies.set('uid', res.data.app_init.user.id)
                 return resolve(res.data)
             }, err => {
                 return reject(err.toString())
@@ -36,7 +40,8 @@ function logout() {
         ).then(res => {
             sessionStorage.removeItem('user')
             sessionStorage.removeItem('token')
-            Cookies.remove('token');
+            Cookies.remove('token', { path: '' });
+            Cookies.remove('uid', { path: '' });
             return resolve(res.data)
         }, err => {
             return reject(err.toString())
@@ -53,7 +58,22 @@ function getToken () {
 function getUserFromCookie (req) {
     if (req) {
         if (!req.headers.cookie) return
+        let cookies = cookie.parse(req.headers.cookie)
 
-        return req.headers.cookie
+        return cookies.token
+    }
+}
+
+function getUidFromStorage() {
+    if(process.browser) {
+        return JSON.parse(sessionStorage.getItem('user')).id
+    }
+}
+
+function getUidFromCookie(req) {
+    if (req) {
+        if (!req.headers.cookie) return
+        let cookies = cookie.parse(req.headers.cookie)
+        return cookies.uid
     }
 }
