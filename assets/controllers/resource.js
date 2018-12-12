@@ -39,7 +39,7 @@ function store(id) {
     })
 }
 
-function update(id, object) {
+function update(id, object) {debugger
     return new Promise((resolve, reject)=>{
         API.call(
             'PUT',

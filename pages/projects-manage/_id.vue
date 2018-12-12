@@ -19,7 +19,7 @@
                                         <b-row>
                                             <b-col cols="2"><label>Active</label></b-col>
                                             <b-col cols="10">
-                                                <toggle @toggle="toggle" :toggled="project.is_active"></toggle>
+                                                <toggle @toggle="toggle" :is_active="project.is_active"></toggle>
                                             </b-col>
                                         </b-row>
                                     </b-container>
@@ -34,7 +34,7 @@
                                             <b-col cols="10">
                                                 <b-form-input id="name"
                                                               type="text"
-                                                              v-model="form.name"
+                                                              v-model="project.name"
                                                               :value="project.name"
                                                               required
                                                               placeholder="Enter name">
@@ -58,9 +58,22 @@
                                 </div>
                             </b-form-group>
                         </b-col>
-                        <b-col class="text-right button-container">
-                            <b-link class="btn btn-secondary" href="/home">Back</b-link>
-                            <b-button type="submit" variant="primary">Submit</b-button>
+                        <b-col class="button-container">
+                            <b-row>
+                                <b-col cols="6">
+                                    <b-alert
+                                            @dismissed="dismissCountDown=0"
+                                            @dismiss-count-down="countDownChanged"
+                                            :show="dismissCountDown"
+                                            variant="success">
+                                        Project successfully saved
+                                    </b-alert>
+                                </b-col>
+                                <b-col cols="6" class="text-right">
+                                    <b-link class="btn btn-secondary" href="/home">Back</b-link>
+                                    <b-button type="submit" variant="primary">Submit</b-button>
+                                </b-col>
+                            </b-row>
                         </b-col>
                     </b-container>
                 </b-form>
@@ -88,6 +101,8 @@
                     name: '',
                     is_active: false
                 },
+                dismissSecs: 3,
+                dismissCountDown: 0
             }
         },
         methods: {
@@ -100,14 +115,18 @@
             },
             onSubmit (evt) {
                 evt.preventDefault();
-                resource.update(this.project.id, this.form).then(res => {
+                resource.update(this.project.id, this.project).then(res => {
                     this.project = res.project
+                    this.dismissCountDown = this.dismissSecs
                 }, err => {
                     this.error = err.toString()
                 })
             },
+            countDownChanged (dismissCountDown) {
+                this.dismissCountDown = dismissCountDown
+            },
             toggle(val){
-                this.form.is_active = val
+                this.project.is_active = val
             }
         },
         created() {
@@ -195,6 +214,12 @@
             }
 
             .button-container {
+                .alert {
+
+                    margin: 0;
+                    padding: 0 15px;
+                    line-height: 36px;
+                }
                 .btn {
                     width: 100px;
                 }

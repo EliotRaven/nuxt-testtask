@@ -4,7 +4,7 @@
               'fa-toggle-on': toggled,
               'fa-toggle-off': !toggled,
               'text-success': toggled,
-              'text-muted': !toggled
+              'text-danger': !toggled
           }"
           @click="toggle">
     </span>

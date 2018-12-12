@@ -51,7 +51,9 @@ function getToken () {
 }
 
 function getUserFromCookie (req) {
-    if (!req.headers.cookie) return
+    if (req) {
+        if (!req.headers.cookie) return
 
-    return req.headers.cookie
+        return req.headers.cookie
+    }
 }
