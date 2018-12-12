@@ -126,7 +126,8 @@
                 this.dismissCountDown = dismissCountDown
             },
             toggle(val){
-                this.project.is_active = val
+                // uncomment for update active status
+                // this.project.is_active = val
             }
         },
         created() {
